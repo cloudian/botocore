@@ -109,6 +109,7 @@ from botocore import BOTOCORE_ROOT
 from botocore.compat import HAS_GZIP, OrderedDict, json
 from botocore.exceptions import DataNotFoundError, UnknownServiceError
 from botocore.utils import deep_merge
+import botocore.s3rdma
 
 _JSON_OPEN_METHODS = {
     '.json': open,
@@ -420,6 +421,10 @@ class Loader:
         # Load in all the extras
         extras_data = self._find_extras(service_name, type_name, api_version)
         self._extras_processor.process(model, extras_data)
+        
+        # Patch s3 service for rdma support
+        if service_name == "s3" and type_name == "service-2":
+            botocore.s3rdma.patch_model(model)
 
         return model
 
