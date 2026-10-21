@@ -3,6 +3,7 @@ import codecs
 import os.path
 import re
 
+from pybind11.setup_helpers import Pybind11Extension, build_ext
 from setuptools import find_packages, setup
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -32,12 +33,21 @@ extras_require = {
     'crt': ['awscrt==0.36.0'],
 }
 
+ext_modules = [
+    Pybind11Extension(
+        name="botocore.pycuobjclient._cuobjclient",
+        sources=["botocore/pycuobjclient/_cuobjclient/pycuobjclient.cpp"],
+        include_dirs=[os.getenv("NVIDIA_CUOBJ_INCLUDE_DIR", "/usr/local/cuda/include")],
+        libraries=["dl"],
+    ),
+]
+
 setup(
     name='botocore',
     version=find_version("botocore", "__init__.py"),
-    description='Low-level, data-driven core of boto 3.',
+    description='Low-level, data-driven core of boto 3 with RDMA extensions.',
     long_description=open('README.rst').read(),
-    author='Amazon Web Services',
+    author='Amazon Web Services with RDMA extensions by Cloudian, Inc.',
     url='https://github.com/boto/botocore',
     scripts=[],
     packages=find_packages(exclude=['tests*']),
@@ -65,4 +75,6 @@ setup(
         'Programming Language :: Python :: 3.14',
         'Programming Language :: Python :: Free Threading :: 2 - Beta',
     ],
+    ext_modules=ext_modules,
+    cmdclass={"build_ext": build_ext},
 )
