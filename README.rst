@@ -10,6 +10,20 @@ botocore package is the foundation for the
 
 Botocore is maintained and published by `Amazon Web Services`_.
 
+.. rdma-section-begin (managed by scripts/patch_botocore.py in https://github.com/cloudian/botocore-rdma - do not edit by hand)
+
+RDMA support
+------------
+
+This fork adds support for RDMA-accelerated S3 ``GetObject``/``PutObject``/``UploadPart``
+operations using NVIDIA's cuobj/GPUDirect Storage client library. See `S3RDMA.md`_ for
+the added functionality and usage.
+
+.. _S3RDMA.md: S3RDMA.md
+
+.. rdma-section-end
+
+
 Notices
 -------
 
