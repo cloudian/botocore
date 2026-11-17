@@ -27,6 +27,8 @@ import botocore.client
 import botocore.configloader
 import botocore.credentials
 import botocore.tokens
+import botocore.s3rdma
+
 from botocore import (
     UNSIGNED,
     __version__,
@@ -159,6 +161,8 @@ class Session:
         if session_vars is not None:
             self.session_var_map.update(session_vars)
         invoke_initializers(self)
+
+        self.register('creating-client-class.s3', botocore.s3rdma.inject_s3rdma)
 
     def _register_components(self):
         self._register_credential_provider()
